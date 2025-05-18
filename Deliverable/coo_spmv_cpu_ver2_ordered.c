@@ -126,9 +126,9 @@ int main(int argc, char * argv[]){
 
     //printf("First element is: row %d, column %d, content %f", row_index[0], column_index[0], value_content[0]);
 
-    //We declare the dense vector as an array of double of size equal to the number of rows of the matrix
+    //We declare the dense vector as an array of float of size equal to the number of the columns of the matrix
     //(in order to be able to perform a matrix vector multiplication) and we generate random values to populate it.
-    //We limit the size of an array element to be less than 1000 just to avoid possible overflows.
+    //We limit the size of an array element just to avoid possible overflows.
     float vector[column];
     srandom(time(NULL));
     for(int i=0; i<column; i++){
@@ -170,7 +170,6 @@ int main(int argc, char * argv[]){
         //}
         memset(result_vector, 0, sizeof result_vector); //we empty the vector so to reuse it in subsequent runs
     }
-
     
     double total_time = 0;
     double total_flops = 0;
