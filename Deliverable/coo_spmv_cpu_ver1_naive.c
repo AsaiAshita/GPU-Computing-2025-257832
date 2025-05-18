@@ -75,10 +75,10 @@ int main(int argc, char * argv[]){
         exit(4);
     }
     //Remove comment to debug matrix dimension and number of nonzero elements
-    printf("Matrix dimensions: %d x %d, Non-zeros: %d\n", row, column, nonzero);
+    //printf("Matrix dimensions: %d x %d, Non-zeros: %d\n", row, column, nonzero);
 
     //We declare the arrays necessary to store the matrix in COO format and we read each line of the file, expecting the following:
-    //row_number column_number double_value
+    //row_number column_number float_value
     //If the following is not respected, the program exists and returns an error.
     int row_index[nonzero];
     int column_index[nonzero];
@@ -97,9 +97,9 @@ int main(int argc, char * argv[]){
         value_content[i] = value;
     }
 
-    //We declare the dense vector as an array of double of size equal to the number of rows of the matrix
+    //We declare the dense vector as an array of float of size equal to the number of the columns of the matrix
     //(in order to be able to perform a matrix vector multiplication) and we generate random values to populate it.
-    //We limit the size of an array element to be less than 1000 just to avoid possible overflows.
+    //We limit the size of an array element just to avoid possible overflows.
     float vector[column];
     srandom(time(NULL));
     for(int i=0; i<column; i++){
@@ -114,17 +114,13 @@ int main(int argc, char * argv[]){
     double bandwidth[EXECUTION];
     
     for(int j = -WARM_UP; j < EXECUTION; j++){
-        //We set up the required functions to measure the time needed by the task
-        //struct timeval temp_1={0,0}, temp_2={0,0};
-        //gettimeofday(&temp_1, NULL);
+        //We set up the required functions to measure the time needed by the task;
         clock_t tic = clock();
         //We execute the task
         for (int i=0; i<nonzero; i++){
             //naive version
             result_vector[row_index[i]] = result_vector[row_index[i]] + (value_content[i] * vector[column_index[i]]); 
         }
-        //gettimeofday(&temp_2, NULL);
-        //float ex_time = ((temp_2.tv_sec-temp_1.tv_sec)+((temp_2.tv_usec-temp_1.tv_usec)/1000000));
         clock_t toc = clock();
         double ex_time = (double) (toc - tic) / CLOCKS_PER_SEC;
         //We get the time the task ended and compute the time it needed to complete. If we have already finished the warm up
@@ -139,7 +135,6 @@ int main(int argc, char * argv[]){
         //}
         memset(result_vector, 0, sizeof result_vector); //we empty the vector so to reuse it in subsequent runs
     }
-
     
     double total_time = 0;
     double total_flops = 0;
